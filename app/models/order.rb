@@ -5,4 +5,8 @@ class Order < ApplicationRecord
   validates :previous_id, presence: true, uniqueness: true
   validates :date, presence: true
   validates :customer, presence: true
+
+  def total_price
+    
+  end
 end

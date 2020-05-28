@@ -1,0 +1,40 @@
+<h1>Memory</h1>
+
+<section id="select-country" class="m-4">
+  <form action="" method="get">
+    <div class="form-inline">
+      <label class="mr-3" for="countries">Country :</label>
+      <select name="country" id="countries" class="form-control" onchange="this.form.submit();">
+        <option>All</option>
+        <% @countries.each do |country| %>
+          <option><%= country %></option>
+        <% end %>
+      </select>
+      <%# <button type="submit" class="btn btn-secondary ml-3"><i class="fas fa-sync-alt"></i> Refresh</button> %>
+    </div>
+  </form>
+</section>
+
+<section id="summary" class="m-4">
+  <h2>Summary</h2>
+
+  <div class="cards d-flex justify-content-around">
+    <div class="card">
+      <h4>Revenue</h4>
+    </div>
+
+    <div class="card">
+      <h4>Average revenue/order</h4>
+    </div>
+
+    <div class="card">
+      <h4>Customers</h4>
+    </div>
+  </div>
+</section>
+
+<section id="graph-view" class="m-4">
+  <h2>Monthly view</h2>
+
+
+</section>
