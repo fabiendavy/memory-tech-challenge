@@ -8,7 +8,7 @@ class PagesController < ApplicationController
     @revenue = get_revenue(selected_country)
     @average_revenue = (@revenue.fdiv(get_orders_number(selected_country))).round(2)
     @number_of_customers = get_customers_number(selected_country)
-    # raise
+    @data_chart = data_chart(selected_country)
   end
 
   private
@@ -41,6 +41,43 @@ class PagesController < ApplicationController
       end
     end
     total_revenue.round(1)
+  end
+
+  def data_chart(country)
+    # we grab all the corresponding orders
+    @orders = []
+    if country
+      Customer.where(country: country).each { |customer| @orders << customer.orders }
+    else
+      @orders = Order.all
+    end
+    @orders.flatten!
+    
+    # we create a hash with the month as the key and all the orders for this month
+    monthly_data = Hash.new { |h, k| h[k] = [] }
+    @orders.each do |order|
+      monthly_data[order.date.month] << order
+    end
+
+    # we create a hash with the month as the key again, and the sum of the orders for this month as the value
+    monthly_revenues = Hash.new(0)
+    monthly_data.keys.each do |key, value|
+      monthly_data[key].each do |order|
+        monthly_revenues[key] += order.total_price
+      end 
+    end
+
+    # we add the missing month and instanciate them to 0
+    (1..12).each { |num| monthly_revenues[num] += 0 }
+
+    # we convert the hash into an array of array and get the name of the month ex: {1: 235} => [['January', 235]]
+    monthly_array = monthly_revenues.sort
+    monthly_array.each do |month|
+      letter_month = Date.new(2020, month[0], 1).strftime('%B')
+      month[0] = letter_month
+      month[1] = month[1].round(2)
+    end
+    monthly_array
   end
 
 end
